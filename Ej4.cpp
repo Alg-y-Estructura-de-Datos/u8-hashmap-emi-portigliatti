@@ -1,93 +1,127 @@
-/*
-Sistema de votaciones
-Objetivo: Crear un sistema de votaciones donde cada votante tiene un número de
-identificación y vota por un candidato.
-La clave será el número de identificación del votante y el valor será el nombre del candidato
-por el que ha votado.
-Implementa funciones para:
-● Registrar un voto.
-● Verificar por quién votó una persona (buscando por su ID).
-● Eliminar un voto si fue incorrecto.
-● Imprimir todos los votos registrados.
-Puntos clave:
-● Prevenir que un votante registre más de un voto.
-● Mostrar un error si se intenta eliminar un voto no existente.
-*/
-
 #include <iostream>
-#include <string>
 #include "HashMap/HashMapList.h"
 using namespace std;
 
 void menu()
 {
-    cout << "Menu" << endl;
-    cout << "1) Registrar un voto" << endl;
-    cout << "2) Verificar por quien voto una persona" << endl;
-    cout << "3) Eliminar un voto si fue incorrecto" << endl;
-    cout << "4) Imprimir todos los votos registrados" << endl;
-    cout << "5) Salir" << endl;
+    cout << "***Menu***" << endl;
+    cout << "1.Agregar Voto" << endl;
+    cout << "2.Buscar voto" << endl;
+    cout << "3.Eliminar voto" << endl;
+    cout << "4.Ver todos los votos" << endl;
+    cout << "5.Salir" << endl;
+}
+
+unsigned int funcionDispersion(unsigned int clave)
+{
+    return clave;
 }
 
 int main()
 {
-    HashMapList<int, string> votos(11);
-    int opc, id;
-    string candidato;
+
+    cout << "Ejercicio N° 4" << endl;
+
+    string valor;
+    unsigned int clave;
+    unsigned int tamanioTabla = 10;
+    HashMapList<unsigned int, string> votantes(tamanioTabla, funcionDispersion);
+
+    int option;
 
     do
     {
         menu();
-        cin >> opc;
-        switch (opc)
+        cout << "Ingrese una opcion" << endl;
+        cin >> option;
+
+        switch (option)
         {
         case 1:
-            cout << "Ingrese Id del votante: " << endl;
-            cin >> id;
-            cout << "Ingrese nombre del candidato: " << endl;
-            cin >> candidato;
-            try
+            cout << "Ingrese el numero de identificacion" << endl;
+            cin.ignore();
+            cin >> clave;
+            cin.ignore();
+            cout << "Ingrese el nombre del candidato" << endl;
+            getline(cin, valor);
+
+            if (votantes.esVacio())
             {
-                votos.put(id, candidato);
-                cout << "Voto registrado correctamente." << endl;
+            votantes.put(clave, valor);
+            cout << "Voto agregado correctamente" << endl;
             }
-            catch (int e)
+            else
             {
-                cout << "Error: colision al registrar el voto" << endl;
+                try
+                {
+                    votantes.get(clave);
+                    cout<<"El votante ya voto"<<endl;
+                }
+                catch(int e)
+                {
+                    votantes.put(clave,valor);
+                    cout<<"agregado correctamente"<<endl;
+                }
+                
             }
-            break;
-        case 2:
-            cout << "Ingrese ID del votante a buscar: " << endl;
-            cin >> id;
-            try
-            {
-                cout << "Voto: " << votos.get(id) << endl;
-            }
-            catch (int e)
-            {
-                cout << "Error: votante no encontrado" << endl;
-            }
-            break;
-        case 3:
-            cout << "Ingrese el ID del votante a eliminar: " << endl;
-            cin >> id;
-            try
-            {
-                votos.remove(id);
-                cout << "Se elimino correctamente el ID del votante." << endl;
-            }
-            catch (int e)
-            {
-                cout << "Error: votante no encontrado." << endl;
-            }
-        case 4:
-            votos.print();
-            break;
-        case 5:
-            cout << "Saliendo" << endl;
-            break;
-        default:
-            cout << "Opcion invalida. Intente de nuevo." << endl;
+            
+            
+        
+
+        break;
+    case 2:
+        if (votantes.esVacio())
+        {
+            cout << "No hay votantes con ese numero en la base de datos" << endl;
         }
-    } while (opc != 5);
+        else
+        {
+            cout << "Ingrese el numero del votante del que quiere saber el voto" << endl;
+            cin.ignore();
+            cin >> clave;
+            cout << "El nombre del candidato es: " << votantes.get(clave) << endl;
+            cout << "Listado en esa posicion" << endl;
+            votantes.getList(clave);
+        }
+
+        break;
+    case 3:
+        if (votantes.esVacio())
+        {
+            cout << "No hay votantes en la base de datos" << endl;
+        }
+        else
+        {
+            cout << "Ingrese el voto que quiere eliminar" << endl;
+            cin.ignore();
+            cin >> clave;
+            try
+            {
+                votantes.remove(clave);
+                cout << "Voto eliminado" << endl;
+            }
+            catch (int e)
+            {
+                if (e == 404)
+                {
+                    cout << "El Votante no existe" << endl;
+                }
+            }
+        }
+
+        break;
+    case 4:
+        cout << "Hash" << endl;
+        votantes.print();
+        break;
+
+    default:
+        cout << "Opcion incorrecta" << endl;
+        break;
+    }
+}
+while (option != 5)
+    ;
+
+return 0;
 }

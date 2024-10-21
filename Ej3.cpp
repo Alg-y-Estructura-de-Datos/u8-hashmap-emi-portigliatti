@@ -100,6 +100,9 @@ int main()
 
             break;
         case 5:
+            productos.print();
+            break;
+        case 6:
             cout << "Saliendo" << endl;
             break;
         default:

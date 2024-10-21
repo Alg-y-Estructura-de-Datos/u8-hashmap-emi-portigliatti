@@ -20,6 +20,8 @@ void menu()
     cout << "2) Buscar un empleado por su numero de identificacion" << endl;
     cout << "3) Eliminar un empleado del sistema" << endl;
     cout << "4) Imprimir la lista completa de empleados" << endl;
+    cout << "5) Salir" << endl;
+
 }
 
 int main()
